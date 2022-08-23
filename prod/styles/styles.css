@@ -1,0 +1,160 @@
+*
+{
+    font-family: 'Josefin Sans';
+    font-size: 16px;
+
+    margin: 0;
+    padding: 0;
+}
+
+body
+{
+    margin: auto;
+
+    background-color: #2d9dc4;
+}
+
+.wrapper
+{
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 50%;
+    margin: 50px auto 0;
+
+    background-color: #fff;
+
+    justify-content: center;
+}
+
+h1
+{
+    font-size: 32px;
+
+    margin: 30px auto;
+
+    text-align: center;
+}
+
+.add_note_wrapper,
+.notes_wrapper
+{
+    position: relative;
+
+    display: flex;
+
+    margin-bottom: 30px;
+    padding: 0 40px;
+
+    justify-content: space-between;
+}
+
+.add_note_wrapper
+{
+    flex-direction: row;
+}
+
+.add_note
+{
+    position: relative;
+
+    width: 88%;
+    height: 30px;
+    padding: 5px 10px;
+
+    border: 1px solid #77bcd7;
+    outline: none;
+}
+
+.add_button
+{
+    width: 42px;
+    height: 42px;
+
+    cursor: pointer;
+
+    color: #fff;
+    border: none;
+    background-color: #77bcd7;
+}
+
+.notes_wrapper
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.note
+{
+    display: flex;
+
+    padding: 15px;
+
+    border-top: 1px solid #ededed;
+    background: #eff9ff;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+.note:last-child
+{
+    border-bottom: 1px solid #ededed;
+}
+
+.text_note,
+.textarea_edit
+{
+    width: 90%;
+    margin-left: 10px;
+    padding: 5px 0pxx;
+
+    color: #319bc3;
+}
+
+.note_complete
+{
+    text-decoration: line-through;
+}
+
+.edit_note,
+.delete_note
+{
+    width: 12px;
+    height: 12px;
+    margin-left: 10px;
+
+    background: url(../sprite.png) no-repeat;
+}
+
+.edit_note
+{
+    background-position: 0 -34px;
+}
+
+.edit_note:hover
+{
+    background-position: 0 -22px;
+}
+
+.delete_note
+{
+    background-position: 0 -11px;
+}
+
+.delete_note:hover
+{
+    background-position: 0 0;
+}
+
+.textarea_edit
+{
+    resize: none;
+
+    border: none;
+    outline: none;
+
+    justify-content: center;
+}
