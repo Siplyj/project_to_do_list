@@ -50,6 +50,7 @@ function addNote() {
 	elem.classList.add('note');
 	elem.setAttribute('data-note-number', `note_${lastNoteNumber}`);
 	elem.setAttribute('data-date', +(new Date()));
+	elem.setAttribute('draggable', true);
 	elem.innerHTML = `<input type="checkbox" name="complete_note" class="complete_note">
 	<span class="text_note">${note.value}</span>
 	<a href="#" onclick="return false" class="edit_note"></a>
@@ -163,3 +164,52 @@ function ready() {
 
 	sortingBy(sortBy);
 };
+
+
+// Drag and drop
+let notes = document.querySelectorAll('.note');
+
+notesWrapper.addEventListener('dragstart', (event) => {
+	event.target.classList.add('selected');
+});
+
+notesWrapper.addEventListener('dragend', (event) => {
+	event.target.classList.remove('selected');
+});
+
+// function getNextElement(cursorPosition, currentElement) {
+// // const getNextElement = (cursorPosition, currentElement) => {
+// 	let currentElementCoord = currentElement.getBoundingClientRect()
+// 	let currentElementCenter = currentElementCoord.top + currentElementCoord.height / 2;
+
+// 	let nextElement = (cursorPosition < currentElementCenter) ?
+// 		currentElement : currentElement.nextElementSibling;
+
+// 	return nextElement;
+// }
+
+notesWrapper.addEventListener('dragover', (event) => {
+	event.preventDefault();
+
+	let activeElement = notesWrapper.querySelector('.selected');
+	let currentElement = event.target;
+	let isMoveable = activeElement !== currentElement &&
+    currentElement.classList.contains('note');
+
+	if (!isMoveable) {
+		return;
+	}
+
+	let nextElement = (currentElement === activeElement.nextElementSibling) ?
+		currentElement.nextElementSibling :
+		currentElement;
+
+	if (nextElement &&
+		activeElement === nextElement.previousElementSibling ||
+		activeElement === nextElement
+	) {
+		return;
+	}
+
+	nextElement.before(activeElement);
+});
