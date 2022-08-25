@@ -1,15 +1,14 @@
 document.addEventListener("DOMContentLoaded", ready);
 
 let wrapper = document.querySelector('.wrapper');
-
-let notesWrapper = document.createElement('ul');
-notesWrapper.classList.add('notes_wrapper');
-wrapper.append(notesWrapper);
-
-let note = document.querySelector('.add_note');
+let addNoteInput = document.querySelector('.add_note');
 let addNoteButton = document.querySelector('.add_button');
+let notesWrapper = document.querySelector('.notes_wrapper');
 let lastNoteNumber = +localStorage.getItem('lastNoteNumber') || 0;
-	
+
+let notesCount = 0;
+
+// Clicks	
 document.addEventListener('click', (event) => {
 	if (event.target.classList.contains('add_button')) {
 		addNote();
@@ -19,49 +18,49 @@ document.addEventListener('click', (event) => {
 		completeNote(event.target);
 	}
 
-	if (event.target.classList.contains('text_note')) {
-		editNote(event.target);
-	}
-
 	if (event.target.classList.contains('edit_note')) {
 		editNote(event.target.previousElementSibling);
 	}
 
 	if (event.target.classList.contains('delete_note')) {
 		deleteNote(event.target);
-		return false;
 	}
 });
 
 // Button Enter
 document.addEventListener('keydown', (event) => {
 	if (event.code == 'Enter') {
-		if (note.value == '') return;
+		if (addNoteInput.value == '') return;
 		addNote();
 	}
 });
 
 // Add note on page
 function addNote() {
-	if (note.value == '') return;
+	if (addNoteInput.value == '') return;
 
 	lastNoteNumber += 1;
+	notesCount += 1;
+
 	let elem = document.createElement('li');
 	elem.classList.add('note');
 	elem.setAttribute('data-note-number', `note_${lastNoteNumber}`);
-	elem.setAttribute('data-date', +(new Date()));
+	// elem.setAttribute('data-date', +(new Date()));
+	elem.setAttribute('data-number', notesCount);
 	elem.setAttribute('draggable', true);
+
 	elem.innerHTML = `<input type="checkbox" name="complete_note" class="complete_note">
-	<span class="text_note">${note.value}</span>
+	<span class="text_note">${addNoteInput.value}</span>
 	<a href="#" onclick="return false" class="edit_note"></a>
 	<a href="#" onclick="return false" class="delete_note"></a>`;
 
 	notesWrapper.append(elem);
 
-	note.value = '';
-	note.focus();
+	addNoteInput.value = '';
+	addNoteInput.focus();
 
 	addNoteToLocalstorage(elem);
+	updateProgressBar();
 };
 
 // Add note on localstorage
@@ -92,14 +91,19 @@ function completeNote(target) {
 	}
 
 	localStorage.setItem(note_number, JSON.stringify(noteObj));
+	updateProgressBar();
 };
 
 // Delete note
 function deleteNote(target) {
+    
 	let elem = target.closest('.note');
 	let note_number = elem.dataset.noteNumber;
 	elem.remove();
 	localStorage.removeItem(note_number);
+
+	changeDataNumbers()
+	updateProgressBar();
 };
 
 // Edit note
@@ -119,6 +123,7 @@ function editNote(target) {
 
     	if (textarea.value == '') {
     		deleteNote(target);
+    		updateProgressBar();
     	} else {
     		let elem = target.closest('.note');
     		let note_number = elem.dataset.noteNumber;
@@ -127,10 +132,28 @@ function editNote(target) {
     });
 };
 
-// Sorting by
-function sortingBy() {
+// Change Data Numbers
+function changeDataNumbers() {
+	let notes = document.querySelectorAll('.note');
+
+	let i = 1;
+	for (let note of notes) {
+		note.setAttribute('data-number', i);
+		i++;
+
+		let noteObj = {
+			noteText: note.outerHTML
+		}
+
+		let note_number = note.getAttribute('data-note-number');
+		localStorage.setItem(note_number, JSON.stringify(noteObj));
+	}
+};
+
+// Sorting
+function sorting() {
 	[...notesWrapper.querySelectorAll('.note')]
-	    .sort((a, b) => a.dataset.date - b.dataset.date)
+	    .sort((a, b) => a.dataset.number - b.dataset.number)
 	    .forEach(element => notesWrapper.append(element));
 }
 
@@ -138,7 +161,6 @@ function sortingBy() {
 function ready() {
 
 	let arr = [];
-	let sortBy = null;
 
 	for(let key in localStorage) {
 
@@ -160,56 +182,77 @@ function ready() {
 	};
 	
 	notesWrapper.innerHTML = arr.join('');
-	console.log(sortBy)
+	notesCount = arr.length;
 
-	sortingBy(sortBy);
+	sorting();
+	updateProgressBar();
 };
 
+// Update Progress Bar
+function updateProgressBar() {
+//	let progressBar = document.querySelector('.progress_bar');
+
+// 	if ([...notesWrapper.querySelectorAll('.note')].length > 0) {
+// 		progressBar.style.display = 'none';
+// 	} else {
+// 		progressBar.style.display = 'block';
+// 	}
+};
 
 // Drag and drop
 let notes = document.querySelectorAll('.note');
 
-notesWrapper.addEventListener('dragstart', (event) => {
-	event.target.classList.add('selected');
-});
+notesWrapper.addEventListener('mousedown', (event) => {
 
-notesWrapper.addEventListener('dragend', (event) => {
-	event.target.classList.remove('selected');
-});
-
-// function getNextElement(cursorPosition, currentElement) {
-// // const getNextElement = (cursorPosition, currentElement) => {
-// 	let currentElementCoord = currentElement.getBoundingClientRect()
-// 	let currentElementCenter = currentElementCoord.top + currentElementCoord.height / 2;
-
-// 	let nextElement = (cursorPosition < currentElementCenter) ?
-// 		currentElement : currentElement.nextElementSibling;
-
-// 	return nextElement;
-// }
-
-notesWrapper.addEventListener('dragover', (event) => {
-	event.preventDefault();
-
-	let activeElement = notesWrapper.querySelector('.selected');
-	let currentElement = event.target;
-	let isMoveable = activeElement !== currentElement &&
-    currentElement.classList.contains('note');
-
-	if (!isMoveable) {
+	if (!(event.target.classList.contains('note') ||
+		  event.target.classList.contains('text_note'))) {
 		return;
 	}
 
-	let nextElement = (currentElement === activeElement.nextElementSibling) ?
-		currentElement.nextElementSibling :
-		currentElement;
+	let target = event.target.closest('.note');
+	target.classList.add('selected');
 
-	if (nextElement &&
-		activeElement === nextElement.previousElementSibling ||
-		activeElement === nextElement
-	) {
-		return;
-	}
+	// Mousemove
+	notesWrapper.addEventListener('mousemove', onMouseMove);
 
-	nextElement.before(activeElement);
+	function onMouseMove(event) {
+
+		let activeElement = notesWrapper.querySelector('.selected');
+		let currentElement = event.target;
+		let isMoveable = activeElement !== currentElement &&
+	    currentElement.classList.contains('note');
+
+		if (!isMoveable) {
+			return;
+		}
+
+		let nextElement = (currentElement === activeElement.nextElementSibling) ?
+			currentElement.nextElementSibling :
+			currentElement;
+
+		if (nextElement &&
+			activeElement === nextElement.previousElementSibling ||
+			activeElement === nextElement
+		) {
+			return;
+		}
+
+		if (nextElement === null) {
+			currentElement.after(activeElement);
+		} else {
+			nextElement.before(activeElement);
+		}
+	};
+
+	// Mouseup
+	notesWrapper.addEventListener('mouseup', (event) => {
+		target.classList.remove('selected');
+		notesWrapper.removeEventListener('mousemove', onMouseMove);
+		changeDataNumbers();
+	});
+
 });
+
+notesWrapper.ondragstart = function() {
+  return false;
+};

@@ -26,7 +26,7 @@ h1 {
 	font-size: 32px;
 }
 
-.add_note_wrapper, .notes_wrapper {
+.add_note_wrapper, .notes_wrapper, .bottom_wrapper {
 	display: flex;
 	position: relative;
 	justify-content: space-between;
@@ -114,4 +114,15 @@ h1 {
 	outline: none;
 	border: none;
 	justify-content: center;
+}
+
+.progress_bar {
+	display: block;
+	width: 25%;
+	border: 1px solid #EDEDED;
+}
+
+.selected {
+	cursor: move;
+	background-color: #ADE0FF;
 }
