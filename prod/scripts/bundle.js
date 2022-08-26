@@ -155,7 +155,7 @@ function sorting() {
 	[...notesWrapper.querySelectorAll('.note')]
 	    .sort((a, b) => a.dataset.number - b.dataset.number)
 	    .forEach(element => notesWrapper.append(element));
-}
+};
 
 // DOMContentLoaded
 function ready() {
@@ -190,13 +190,19 @@ function ready() {
 
 // Update Progress Bar
 function updateProgressBar() {
-//	let progressBar = document.querySelector('.progress_bar');
+	let progressBar = document.querySelector('.progress_bar');
+	let notesDone = document.querySelector('.notes_done');
+	let notesTotal = document.querySelector('.notes_total');
+	let progressStatus = document.querySelector('.progress_status')
 
-// 	if ([...notesWrapper.querySelectorAll('.note')].length > 0) {
-// 		progressBar.style.display = 'none';
-// 	} else {
-// 		progressBar.style.display = 'block';
-// 	}
+	if ([...notesWrapper.querySelectorAll('.note')].length > 0) {
+		notesDone.textContent = notesWrapper.querySelectorAll('.complete_note[checked=true]').length;
+		notesTotal.textContent = notesWrapper.querySelectorAll('.note').length;
+		progressBar.style.display = 'block';
+		progressStatus.style.width = (notesDone.textContent/notesTotal.textContent)*100 + '%';
+	} else {
+		progressBar.style.display = 'none';
+	}
 };
 
 // Drag and drop
