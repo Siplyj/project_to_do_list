@@ -7,7 +7,7 @@
 
 body {
 	margin: auto;
-	background-color: #2d9dc4;
+	background-color: #2D9DC4;
 }
 
 .wrapper {
@@ -83,7 +83,7 @@ h1 {
 .text_note, .textarea_edit {
 	color: #319BC3;
 	width: 90%;
-	padding: 5px 0pxx;
+	padding: 5px 0px;
 	margin-left: 10px;
 }
 
@@ -129,13 +129,18 @@ h1 {
 .progress_bar {
 	display: block;
 	width: 200px;
-	border: 1px solid #EDEDED;
+	height: 25px;
+	outline: 1px solid #EDEDED;
+}
+
+.hidden_element {
+	visibility: hidden;
 }
 
 .progress_status {
 	height: 100%;
 	background: #77BF63;
-	transition: all .5s ease-in;
+	transition: width .5s ease-in;
 }
 
 .progress_status > p {
@@ -148,3 +153,16 @@ h1 {
 	font-weight: bold;
 }
 
+.remove_completed_tasks {
+	line-height: 25px;
+    width: 200px;
+    text-decoration: none;
+    color: #FFFFFF;
+    background-color: #77bcd7;
+    height: 25px;
+    text-align: center;
+}
+
+.background_color {
+
+}

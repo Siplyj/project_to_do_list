@@ -124,7 +124,7 @@ h1
 {
     width: 90%;
     margin-left: 10px;
-    padding: 5px 0pxx;
+    padding: 5px 0;
 
     color: #319bc3;
 }
@@ -186,15 +186,21 @@ h1
     display: block;
 
     width: 200px;
+    height: 25px;
 
-    border: 1px solid #ededed;
+    outline: 1px solid #ededed;
+}
+
+.hidden_element
+{
+    visibility: hidden;
 }
 
 .progress_status
 {
     height: 100%;
 
-    transition: all .5s ease-in;
+    transition: width .5s ease-in;
 
     background: #77bf63;
 }
@@ -212,4 +218,18 @@ h1
 .notes_total
 {
     font-weight: bold;
+}
+
+.remove_completed_tasks
+{
+    line-height: 25px;
+
+    width: 200px;
+    height: 25px;
+
+    text-align: center;
+    text-decoration: none;
+
+    color: #fff;
+    background-color: #77bcd7;
 }

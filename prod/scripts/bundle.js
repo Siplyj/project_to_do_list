@@ -5,6 +5,7 @@ let addNoteInput = document.querySelector('.add_note');
 let addNoteButton = document.querySelector('.add_button');
 let notesWrapper = document.querySelector('.notes_wrapper');
 let lastNoteNumber = +localStorage.getItem('lastNoteNumber') || 0;
+let removeCompletedTasksButton = document.querySelector('.remove_completed_tasks');
 
 let notesCount = 0;
 
@@ -24,6 +25,12 @@ document.addEventListener('click', (event) => {
 
 	if (event.target.classList.contains('delete_note')) {
 		deleteNote(event.target);
+	}
+
+	if (event.target.classList.contains('remove_completed_tasks')) {
+		for (let note of notesWrapper.querySelectorAll('.complete_note[checked=true]')) {
+			deleteNote(note);
+		}
 	}
 });
 
@@ -45,7 +52,6 @@ function addNote() {
 	let elem = document.createElement('li');
 	elem.classList.add('note');
 	elem.setAttribute('data-note-number', `note_${lastNoteNumber}`);
-	// elem.setAttribute('data-date', +(new Date()));
 	elem.setAttribute('data-number', notesCount);
 	elem.setAttribute('draggable', true);
 
@@ -91,6 +97,8 @@ function completeNote(target) {
 	}
 
 	localStorage.setItem(note_number, JSON.stringify(noteObj));
+
+	showDeleteAllButton();
 	updateProgressBar();
 };
 
@@ -104,6 +112,10 @@ function deleteNote(target) {
 
 	changeDataNumbers()
 	updateProgressBar();
+
+	if (!document.querySelector('.complete_note[checked=true]')) {
+		removeCompletedTasksButton.classList.add('hidden_element');
+	}
 };
 
 // Edit note
@@ -185,6 +197,7 @@ function ready() {
 	notesCount = arr.length;
 
 	sorting();
+	showDeleteAllButton();
 	updateProgressBar();
 };
 
@@ -193,15 +206,20 @@ function updateProgressBar() {
 	let progressBar = document.querySelector('.progress_bar');
 	let notesDone = document.querySelector('.notes_done');
 	let notesTotal = document.querySelector('.notes_total');
-	let progressStatus = document.querySelector('.progress_status')
+	let progressStatus = document.querySelector('.progress_status');
 
 	if ([...notesWrapper.querySelectorAll('.note')].length > 0) {
 		notesDone.textContent = notesWrapper.querySelectorAll('.complete_note[checked=true]').length;
 		notesTotal.textContent = notesWrapper.querySelectorAll('.note').length;
-		progressBar.style.display = 'block';
+		
+		if (progressBar.classList.contains('hidden_element')) {
+			progressBar.classList.remove('hidden_element');
+		}
+
 		progressStatus.style.width = (notesDone.textContent/notesTotal.textContent)*100 + '%';
 	} else {
-		progressBar.style.display = 'none';
+		progressStatus.style.width = '0px';
+		progressBar.classList.add('hidden_element');
 	}
 };
 
@@ -211,7 +229,7 @@ let notes = document.querySelectorAll('.note');
 notesWrapper.addEventListener('mousedown', (event) => {
 
 	if (!(event.target.classList.contains('note') ||
-		  event.target.classList.contains('text_note'))) {
+		event.target.classList.contains('text_note'))) {
 		return;
 	}
 
@@ -222,7 +240,6 @@ notesWrapper.addEventListener('mousedown', (event) => {
 	notesWrapper.addEventListener('mousemove', onMouseMove);
 
 	function onMouseMove(event) {
-
 		let activeElement = notesWrapper.querySelector('.selected');
 		let currentElement = event.target;
 		let isMoveable = activeElement !== currentElement &&
@@ -256,9 +273,24 @@ notesWrapper.addEventListener('mousedown', (event) => {
 		notesWrapper.removeEventListener('mousemove', onMouseMove);
 		changeDataNumbers();
 	});
-
 });
 
 notesWrapper.ondragstart = function() {
   return false;
 };
+
+// Show/hide delete button
+function showDeleteAllButton() {
+	if (!document.querySelector('.complete_note[checked=true]')) {
+		removeCompletedTasksButton.classList.add('hidden_element');
+	} else {
+		removeCompletedTasksButton.classList.remove('hidden_element')
+	}
+};
+
+// Change background color
+let backgroundColorInput = document.querySelector('.background_color');
+
+backgroundColorInput.addEventListener('change', (event) => {
+	document.body.style.backgroundColor = event.target.value;
+})
