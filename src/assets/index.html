@@ -5,7 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Josefin+Sans:400&amp;">
 	<link rel="stylesheet" type="text/css" href="styles/styles.css">
-	<script defer type="text/javascript" src="scripts/bundle.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js"></script>
+	<script defer src="scripts/bundle.js"></script>
 	<title>My To Do List</title>
 </head>
 <body>
@@ -13,7 +15,7 @@
 		<h1>My To Do List</h1>
 		<div class="add_note_wrapper">
 			<input type="text" class="add_note" name="message_text" placeholder="what needs to be done?">
-			<input type="button" class="add_button" name="" value= "+">
+			<input type="button" class="add_button" name="add_button" value= "+">
 		</div>
 		<ul class="notes_wrapper"></ul>
 		<div class="bottom_wrapper">
@@ -28,9 +30,7 @@
 				</div>
 			</div>
 			<a href="#" onclick="return false" class="remove_completed_tasks hidden_element">Remove completed tasks</a>
-			<input type="color" class="background_color" name="color" value="#2D9DC4">
 		</div>
 	</div>
-	
 </body>
 </html>

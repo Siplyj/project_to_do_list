@@ -287,10 +287,3 @@ function showDeleteAllButton() {
 		removeCompletedTasksButton.classList.remove('hidden_element')
 	}
 };
-
-// Change background color
-let backgroundColorInput = document.querySelector('.background_color');
-
-backgroundColorInput.addEventListener('change', (event) => {
-	document.body.style.backgroundColor = event.target.value;
-})
