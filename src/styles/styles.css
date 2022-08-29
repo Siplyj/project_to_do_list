@@ -14,7 +14,8 @@ body {
 	position: relative;
 	background-color: #FFFFFF;
 	width: 50%;
-	margin: 50px auto 0px;
+	min-width: 700px;
+	margin: 50px auto;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -126,6 +127,8 @@ h1 {
 	background-color: #ADE0FF;
 }
 
+.bottom_wrapper
+
 .progress_bar {
 	display: block;
 	width: 200px;
@@ -161,4 +164,26 @@ h1 {
     background-color: #77bcd7;
     height: 25px;
     text-align: center;
+}
+
+@media (max-width: 768px) {
+	.wrapper {
+		width: 90%;
+		min-width: 300px;
+	}
+
+	.progress_bar, .remove_completed_tasks {
+		min-width: 200px;
+	}
+}
+
+@media (max-width: 550px) {
+	.bottom_wrapper {
+		flex-direction: column;
+		margin: 0px auto 30px;
+	}
+
+	.progress_bar {
+		margin-bottom: 15px;
+	}
 }
